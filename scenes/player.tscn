@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://bqjnh8yw1ofuh"]
+
+[ext_resource type="Script" path="res://scripts/player_controller.gd" id="1_0msda"]
+[ext_resource type="Script" path="res://scripts/foot_kicker.gd" id="2_tcob3"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.45
+height = 1.55
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+radius = 0.46
+mid_height = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.22, 0.45, 0.95, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_foot"]
+radius = 0.3
+
+[sub_resource type="SphereMesh" id="SphereMesh_foot"]
+radius = 0.28
+height = 0.56
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_left_foot"]
+albedo_color = Color(0.98, 0.76, 0.36, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_right_foot"]
+albedo_color = Color(0.98, 0.54, 0.42, 1)
+
+[node name="SoccerPlayer" type="CharacterBody3D"]
+script = ExtResource("1_0msda")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="BodyVisual" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+mesh = SubResource("CapsuleMesh_body")
+surface_material_override/0 = SubResource("StandardMaterial3D_body")
+
+[node name="BallAnchor" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, -0.95)
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 7.8)
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+fov = 68.0
+current = false
+
+[node name="LeftFootPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.906308, -0.422618, 0, 0.422618, 0.906308, -0.7, 0.72, -0.72)
+
+[node name="LeftFoot" type="Area3D" parent="LeftFootPivot"]
+script = ExtResource("2_tcob3")
+side = "left"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftFootPivot/LeftFoot"]
+shape = SubResource("SphereShape3D_foot")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LeftFootPivot/LeftFoot"]
+mesh = SubResource("SphereMesh_foot")
+surface_material_override/0 = SubResource("StandardMaterial3D_left_foot")
+
+[node name="RightFootPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0.7, 0.72, -0.72)
+
+[node name="RightFoot" type="Area3D" parent="RightFootPivot"]
+script = ExtResource("2_tcob3")
+side = "right"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightFootPivot/RightFoot"]
+shape = SubResource("SphereShape3D_foot")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RightFootPivot/RightFoot"]
+mesh = SubResource("SphereMesh_foot")
+surface_material_override/0 = SubResource("StandardMaterial3D_right_foot")
